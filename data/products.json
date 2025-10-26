@@ -1,15 +1,5 @@
 [
   {
-    "id": 4,
-    "name": "Brownies Coklat",
-    "categoryId": 2,
-    "price": 35000,
-    "stock": 20,
-    "discount": 15,
-    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-    "description": "Brownies coklat yang lembut dan moist dengan coklat premium"
-  },
-  {
     "id": 5,
     "name": "French Baguette",
     "categoryId": 1,
