@@ -1,15 +1,5 @@
 [
   {
-    "id": 5,
-    "name": "French Baguette",
-    "categoryId": 1,
-    "price": 22000,
-    "stock": 15,
-    "discount": 0,
-    "image": "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-    "description": "Baguette Perancis yang autentik dengan kulit renyah dan dalam lembut"
-  },
-  {
     "id": 6,
     "name": "Muffin Blueberry",
     "categoryId": 2,
