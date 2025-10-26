@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "1761522843960",
+    "customerName": "e",
+    "customerPhone": "0895622268420",
+    "customerAddress": "heh",
+    "orderNotes": "rgytwe",
+    "items": [
+      {
+        "productId": 1,
+        "productName": "Roti Tawar Premium",
+        "quantity": 1,
+        "price": 25000,
+        "total": 25000
+      },
+      {
+        "productId": 2,
+        "productName": "Croissant Butter",
+        "quantity": 2,
+        "price": 16200,
+        "total": 32400
+      },
+      {
+        "productId": 3,
+        "productName": "Donat Glaze",
+        "quantity": 1,
+        "price": 12000,
+        "total": 12000
+      },
+      {
+        "productId": 4,
+        "productName": "Brownies Coklat",
+        "quantity": 1,
+        "price": 29750,
+        "total": 29750
+      }
+    ],
+    "totalAmount": 99150,
+    "status": "pending",
+    "createdAt": "2025-10-26T23:54:03.960Z"
+  }
+]
