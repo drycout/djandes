@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - DJANDES Bakery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .admin-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-cancelled {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .sync-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .sync-success {
+            background-color: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        .sync-error {
+            background-color: #ef4444;
+        }
+        
+        .sync-syncing {
+            background-color: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-gray-600">Memuat Admin Panel...</p>
+        </div>
+    </div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white shadow-lg">
+            <div class="p-6 admin-gradient text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-bread-slice text-2xl mr-2"></i>
+                    <div>
+                        <h1 class="text-xl font-bold">DJANDES</h1>
+                        <p class="text-sm opacity-90">Admin Panel</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="mt-6">
+                <a href="#" onclick="showSection('dashboard')" class="sidebar-item active flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="#" onclick="showSection('products')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-box w-5 mr-3"></i>
+                    Produk
+                </a>
+                <a href="#" onclick="showSection('categories')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-tags w-5 mr-3"></i>
+                    Kategori
+                </a>
+                <a href="#" onclick="showSection('orders')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-shopping-cart w-5 mr-3"></i>
+                    Pesanan
+                </a>
+                <a href="#" onclick="showSection('contacts')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-envelope w-5 mr-3"></i>
+                    Kontak
+                </a>
+                <a href="#" onclick="showSection('settings')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:text-purple-600">
+                    <i class="fas fa-cog w-5 mr-3"></i>
+                    Pengaturan
+                </a>
+            </nav>
+            
+            <div class="absolute bottom-0 w-64 p-6 border-t">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-600">GitHub Sync</span>
+                    <span id="syncStatus" class="sync-indicator sync-syncing"></span>
+                </div>
+                <button onclick="showGitHubSetup()" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition text-sm">
+                    <i class="fab fa-github mr-2"></i>
+                    GitHub Setup
+                </button>
+                <a href="index.html" class="block w-full mt-2 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition text-sm text-center">
+                    <i class="fas fa-eye mr-2"></i>
+                    Lihat Website
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <h2 id="sectionTitle" class="text-2xl font-semibold text-gray-800">Dashboard</h2>
+                    <div class="flex items-center space-x-4">
+                        <span id="lastSync" class="text-sm text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            Sync: -
+                        </span>
+                        <button onclick="syncAllData()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-sm">
+                            <i class="fas fa-sync mr-2"></i>
+                            Sync Sekarang
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Produk</p>
+                                <p id="totalProducts" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-box text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Kategori</p>
+                                <p id="totalCategories" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-tags text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Pesanan</p>
+                                <p id="totalOrders" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-shopping-cart text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Pesan Masuk</p>
+                                <p id="totalContacts" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <i class="fas fa-envelope text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold mb-4">Pesanan Terbaru</h3>
+                        <div id="recentOrders" class="space-y-3">
+                            <!-- Recent orders will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold mb-4">Pesan Terbaru</h3>
+                        <div id="recentContacts" class="space-y-3">
+                            <!-- Recent contacts will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" class="p-6 hidden">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Daftar Produk</h3>
+                        <button onclick="showProductModal()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-plus mr-2"></i>
+                            Tambah Produk
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section id="categories" class="p-6 hidden">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Daftar Kategori</h3>
+                        <button onclick="showCategoryModal()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-plus mr-2"></i>
+                            Tambah Kategori
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Categories will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="orders" class="p-6 hidden">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">Daftar Pesanan</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelanggan</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="p-6 hidden">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">Pesan Masuk</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pesan</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contactsTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Contacts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="p-6 hidden">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-6">Pengaturan Website</h3>
+                    <form onsubmit="saveSettings(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Nama Toko</label>
+                                <input type="text" id="siteName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" id="siteEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Telepon</label>
+                                <input type="tel" id="sitePhone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Alamat</label>
+                                <input type="text" id="siteAddress" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <label class="block text-gray-700 mb-2">Deskripsi</label>
+                            <textarea id="siteDescription" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600"></textarea>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                                <i class="fas fa-save mr-2"></i>
+                                Simpan Pengaturan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold" id="productModalTitle">Tambah Produk</h3>
+                        <button onclick="hideProductModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <form onsubmit="saveProduct(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Nama Produk</label>
+                                <input type="text" id="productName" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Kategori</label>
+                                <select id="productCategory" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                                    <option value="">Pilih Kategori</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Harga</label>
+                                <input type="number" id="productPrice" required min="0" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Stok</label>
+                                <input type="number" id="productStock" required min="0" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Diskon (%)</label>
+                                <input type="number" id="productDiscount" min="0" max="100" value="0" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">URL Gambar</label>
+                                <input type="url" id="productImage" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-gray-700 mb-2">Deskripsi</label>
+                            <textarea id="productDescription" rows="3" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600"></textarea>
+                        </div>
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button type="button" onclick="hideProductModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
+                                Batal
+                            </button>
+                            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                                <i class="fas fa-save mr-2"></i>
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold" id="categoryModalTitle">Tambah Kategori</h3>
+                        <button onclick="hideCategoryModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <form onsubmit="saveCategory(event)">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Nama Kategori</label>
+                            <input type="text" id="categoryName" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">Deskripsi</label>
+                            <textarea id="categoryDescription" rows="3" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600"></textarea>
+                        </div>
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" onclick="hideCategoryModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
+                                Batal
+                            </button>
+                            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                                <i class="fas fa-save mr-2"></i>
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GitHub Setup Modal -->
+    <div id="githubModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">GitHub Setup</h3>
+                        <button onclick="hideGitHubModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">GitHub Username</label>
+                        <input type="text" id="githubUsername" placeholder="drycout" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Repository Name</label>
+                        <input type="text" id="githubRepo" placeholder="djandes-site" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Personal Access Token</label>
+                        <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                        <p class="text-sm text-gray-500 mt-2">Token akan disimpan secara aman di browser ini</p>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="hideGitHubModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
+                            Batal
+                        </button>
+                        <button onclick="saveGitHubConfig()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-save mr-2"></i>
+                            Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full transition-transform duration-300 z-50">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage">Success!</span>
+        </div>
+    </div>
+
+    <script src="github-integration.js"></script>
+    <script>
+        // Global variables
+        let products = [];
+        let categories = [];
+        let orders = [];
+        let contacts = [];
+        let websiteConfig = {};
+        let currentEditProduct = null;
+        let currentEditCategory = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadData();
+            initializeApp();
+        });
+
+        // Load data from GitHub
+        async function loadData() {
+            try {
+                const github = new GitHubIntegration();
+                
+                // Load all data in parallel
+                const [productsData, categoriesData, ordersData, contactsData, websiteData] = await Promise.all([
+                    github.getProducts(),
+                    github.getCategories(),
+                    github.getOrders(),
+                    github.getContacts(),
+                    github.getWebsiteConfig()
+                ]);
+                
+                products = productsData;
+                categories = categoriesData;
+                orders = ordersData;
+                contacts = contactsData;
+                websiteConfig = websiteData;
+                
+                hideLoading();
+                updateDashboard();
+                renderProducts();
+                renderCategories();
+                renderOrders();
+                renderContacts();
+                loadSettings();
+                updateSyncStatus('success');
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                hideLoading();
+                updateSyncStatus('error');
+                showError('Gagal memuat data. Silakan periksa konfigurasi GitHub Anda.');
+            }
+        }
+
+        // Initialize app
+        function initializeApp() {
+            // Check for saved GitHub config
+            const savedConfig = localStorage.getItem('githubConfig');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                document.getElementById('githubUsername').value = config.username || '';
+                document.getElementById('githubRepo').value = config.repo || '';
+            }
+        }
+
+        // Hide loading screen
+        function hideLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 300);
+        }
+
+        // Show error message
+        function showError(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.className = 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 z-50';
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(200%)';
+            }, 3000);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(200%)';
+            }, 3000);
+        }
+
+        // Update sync status
+        function updateSyncStatus(status) {
+            const syncStatus = document.getElementById('syncStatus');
+            const lastSync = document.getElementById('lastSync');
+            
+            syncStatus.className = 'sync-indicator';
+            
+            switch(status) {
+                case 'success':
+                    syncStatus.classList.add('sync-success');
+                    lastSync.innerHTML = '<i class="fas fa-clock mr-1"></i>Sync: ' + new Date().toLocaleTimeString('id-ID');
+                    break;
+                case 'error':
+                    syncStatus.classList.add('sync-error');
+                    lastSync.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i>Sync Error';
+                    break;
+                case 'syncing':
+                    syncStatus.classList.add('sync-syncing');
+                    lastSync.innerHTML = '<i class="fas fa-sync fa-spin mr-1"></i>Syncing...';
+                    break;
+            }
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update sidebar
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update title
+            const titles = {
+                dashboard: 'Dashboard',
+                products: 'Produk',
+                categories: 'Kategori',
+                orders: 'Pesanan',
+                contacts: 'Kontak',
+                settings: 'Pengaturan'
+            };
+            document.getElementById('sectionTitle').textContent = titles[sectionName];
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalCategories').textContent = categories.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('totalContacts').textContent = contacts.length;
+            
+            // Recent orders
+            const recentOrders = orders.slice(0, 5);
+            document.getElementById('recentOrders').innerHTML = recentOrders.map(order => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                    <div>
+                        <p class="font-semibold">${order.customerName}</p>
+                        <p class="text-sm text-gray-600">Rp ${order.totalAmount.toLocaleString('id-ID')}</p>
+                    </div>
+                    <span class="status-badge status-${order.status}">${order.status}</span>
+                </div>
+            `).join('');
+            
+            // Recent contacts
+            const recentContacts = contacts.slice(0, 5);
+            document.getElementById('recentContacts').innerHTML = recentContacts.map(contact => `
+                <div class="p-3 bg-gray-50 rounded">
+                    <p class="font-semibold">${contact.name}</p>
+                    <p class="text-sm text-gray-600">${contact.email}</p>
+                    <p class="text-sm text-gray-500 mt-1">${contact.message.substring(0, 50)}...</p>
+                </div>
+            `).join('');
+        }
+
+        // Render products
+        function renderProducts() {
+            const productsTable = document.getElementById('productsTable');
+            
+            if (products.length === 0) {
+                productsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada produk
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            productsTable.innerHTML = products.map(product => {
+                const category = categories.find(c => c.id === product.categoryId);
+                return `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <img src="${product.image}" alt="${product.name}" class="w-12 h-12 object-cover rounded">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                            <div class="text-sm text-gray-500">${product.description.substring(0, 30)}...</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">${category ? category.name : '-'}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">Rp ${product.price.toLocaleString('id-ID')}</span>
+                            ${product.discount > 0 ? `<br><span class="text-xs text-red-500">${product.discount}% OFF</span>` : ''}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">${product.stock}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${product.stock > 0 ? 'Tersedia' : 'Habis'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="editProduct(${product.id})" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteProduct(${product.id})" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Render categories
+        function renderCategories() {
+            const categoriesTable = document.getElementById('categoriesTable');
+            
+            if (categories.length === 0) {
+                categoriesTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada kategori
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            categoriesTable.innerHTML = categories.map(category => {
+                const productCount = products.filter(p => p.categoryId === category.id).length;
+                return `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${category.name}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-500">${category.description}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm text-gray-900">${productCount} produk</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="editCategory(${category.id})" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteCategory(${category.id})" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Render orders
+        function renderOrders() {
+            const ordersTable = document.getElementById('ordersTable');
+            
+            if (orders.length === 0) {
+                ordersTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada pesanan
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            ordersTable.innerHTML = orders.map(order => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">#${order.id}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${order.customerName}</div>
+                        <div class="text-sm text-gray-500">${order.customerPhone}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">Rp ${order.totalAmount.toLocaleString('id-ID')}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-badge status-${order.status}">${order.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${new Date(order.createdAt).toLocaleDateString('id-ID')}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-sm border rounded px-2 py-1">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                            <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render contacts
+        function renderContacts() {
+            const contactsTable = document.getElementById('contactsTable');
+            
+            if (contacts.length === 0) {
+                contactsTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada pesan
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            contactsTable.innerHTML = contacts.map(contact => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">${contact.name}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${contact.email}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-900 max-w-xs truncate">${contact.message}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${new Date(contact.createdAt).toLocaleDateString('id-ID')}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="deleteContact('${contact.id}')" class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Product modal functions
+        function showProductModal() {
+            currentEditProduct = null;
+            document.getElementById('productModalTitle').textContent = 'Tambah Produk';
+            document.getElementById('productName').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productStock').value = '';
+            document.getElementById('productDiscount').value = '0';
+            document.getElementById('productImage').value = '';
+            document.getElementById('productDescription').value = '';
+            
+            // Load categories
+            const categorySelect = document.getElementById('productCategory');
+            categorySelect.innerHTML = '<option value="">Pilih Kategori</option>' + 
+                categories.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('');
+            
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function hideProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            currentEditProduct = product;
+            document.getElementById('productModalTitle').textContent = 'Edit Produk';
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productDiscount').value = product.discount || 0;
+            document.getElementById('productImage').value = product.image;
+            document.getElementById('productDescription').value = product.description;
+            
+            // Load categories
+            const categorySelect = document.getElementById('productCategory');
+            categorySelect.innerHTML = '<option value="">Pilih Kategori</option>' + 
+                categories.map(cat => `<option value="${cat.id}" ${cat.id === product.categoryId ? 'selected' : ''}>${cat.name}</option>`).join('');
+            
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        async function saveProduct(event) {
+            event.preventDefault();
+            
+            const productData = {
+                name: document.getElementById('productName').value,
+                categoryId: document.getElementById('productCategory').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                discount: parseInt(document.getElementById('productDiscount').value) || 0,
+                image: document.getElementById('productImage').value,
+                description: document.getElementById('productDescription').value
+            };
+            
+            try {
+                const github = new GitHubIntegration();
+                
+                if (currentEditProduct) {
+                    // Update existing product
+                    await github.updateProduct(currentEditProduct.id, productData);
+                    showToast('Produk berhasil diperbarui');
+                } else {
+                    // Add new product
+                    await github.addProduct(productData);
+                    showToast('Produk berhasil ditambahkan');
+                }
+                
+                hideProductModal();
+                await loadData();
+                
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showError('Gagal menyimpan produk');
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus produk ini?')) return;
+            
+            try {
+                const github = new GitHubIntegration();
+                await github.deleteProduct(productId);
+                showToast('Produk berhasil dihapus');
+                await loadData();
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                showError('Gagal menghapus produk');
+            }
+        }
+
+        // Category modal functions
+        function showCategoryModal() {
+            currentEditCategory = null;
+            document.getElementById('categoryModalTitle').textContent = 'Tambah Kategori';
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryDescription').value = '';
+            document.getElementById('categoryModal').classList.remove('hidden');
+        }
+
+        function hideCategoryModal() {
+            document.getElementById('categoryModal').classList.add('hidden');
+        }
+
+        function editCategory(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            if (!category) return;
+            
+            currentEditCategory = category;
+            document.getElementById('categoryModalTitle').textContent = 'Edit Kategori';
+            document.getElementById('categoryName').value = category.name;
+            document.getElementById('categoryDescription').value = category.description;
+            document.getElementById('categoryModal').classList.remove('hidden');
+        }
+
+        async function saveCategory(event) {
+            event.preventDefault();
+            
+            const categoryData = {
+                name: document.getElementById('categoryName').value,
+                description: document.getElementById('categoryDescription').value
+            };
+            
+            try {
+                const github = new GitHubIntegration();
+                
+                if (currentEditCategory) {
+                    // Update existing category
+                    await github.updateCategory(currentEditCategory.id, categoryData);
+                    showToast('Kategori berhasil diperbarui');
+                } else {
+                    // Add new category
+                    await github.addCategory(categoryData);
+                    showToast('Kategori berhasil ditambahkan');
+                }
+                
+                hideCategoryModal();
+                await loadData();
+                
+            } catch (error) {
+                console.error('Error saving category:', error);
+                showError('Gagal menyimpan kategori');
+            }
+        }
+
+        async function deleteCategory(categoryId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus kategori ini?')) return;
+            
+            try {
+                const github = new GitHubIntegration();
+                await github.deleteCategory(categoryId);
+                showToast('Kategori berhasil dihapus');
+                await loadData();
+            } catch (error) {
+                console.error('Error deleting category:', error);
+                showError('Gagal menghapus kategori');
+            }
+        }
+
+        // Order functions
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const github = new GitHubIntegration();
+                await github.updateOrderStatus(orderId, newStatus);
+                showToast('Status pesanan berhasil diperbarui');
+                await loadData();
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                showError('Gagal memperbarui status pesanan');
+            }
+        }
+
+        // Contact functions
+        async function deleteContact(contactId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus pesan ini?')) return;
+            
+            try {
+                const github = new GitHubIntegration();
+                await github.deleteContact(contactId);
+                showToast('Pesan berhasil dihapus');
+                await loadData();
+            } catch (error) {
+                console.error('Error deleting contact:', error);
+                showError('Gagal menghapus pesan');
+            }
+        }
+
+        // Settings functions
+        function loadSettings() {
+            document.getElementById('siteName').value = websiteConfig.name || '';
+            document.getElementById('siteEmail').value = websiteConfig.email || '';
+            document.getElementById('sitePhone').value = websiteConfig.phone || '';
+            document.getElementById('siteAddress').value = websiteConfig.address || '';
+            document.getElementById('siteDescription').value = websiteConfig.description || '';
+        }
+
+        async function saveSettings(event) {
+            event.preventDefault();
+            
+            const settingsData = {
+                name: document.getElementById('siteName').value,
+                email: document.getElementById('siteEmail').value,
+                phone: document.getElementById('sitePhone').value,
+                address: document.getElementById('siteAddress').value,
+                description: document.getElementById('siteDescription').value
+            };
+            
+            try {
+                const github = new GitHubIntegration();
+                await github.updateWebsiteConfig(settingsData);
+                showToast('Pengaturan berhasil disimpan');
+                await loadData();
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                showError('Gagal menyimpan pengaturan');
+            }
+        }
+
+        // GitHub functions
+        function showGitHubSetup() {
+            document.getElementById('githubModal').classList.remove('hidden');
+        }
+
+        function hideGitHubModal() {
+            document.getElementById('githubModal').classList.add('hidden');
+        }
+
+        function saveGitHubConfig() {
+            const config = {
+                username: document.getElementById('githubUsername').value,
+                repo: document.getElementById('githubRepo').value,
+                token: document.getElementById('githubToken').value
+            };
+            
+            if (!config.username || !config.repo || !config.token) {
+                showError('Semua field harus diisi');
+                return;
+            }
+            
+            localStorage.setItem('githubConfig', JSON.stringify(config));
+            showToast('Konfigurasi GitHub berhasil disimpan');
+            hideGitHubModal();
+            
+            // Reload data with new config
+            loadData();
+        }
+
+        async function syncAllData() {
+            updateSyncStatus('syncing');
+            try {
+                await loadData();
+                showToast('Data berhasil disinkronkan');
+            } catch (error) {
+                console.error('Error syncing data:', error);
+                showError('Gagal sinkronisasi data');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "name": "djandes-bakery-website",
+  "version": "1.0.0",
+  "description": "DJANDES Bakery - Complete e-commerce website with GitHub integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "serve": "npx serve . -p 8000",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "echo 'Deploy to GitHub Pages manually'"
+  },
+  "keywords": [
+    "bakery",
+    "ecommerce",
+    "github-integration",
+    "static-site",
+    "responsive",
+    "tailwind-css"
+  ],
+  "author": "DJANDES Bakery",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drycout/djandes-site.git"
+  },
+  "homepage": "https://drycout.github.io/djandes-site/",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

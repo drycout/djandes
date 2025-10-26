@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "name": "Roti Tawar Premium",
+        "categoryId": 1,
+        "price": 25000,
+        "stock": 50,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Roti tawar lembut dengan kualitas premium, dibuat dari tepung terigu pilihan dan mentega berkualitas"
+    },
+    {
+        "id": 2,
+        "name": "Croissant Butter",
+        "categoryId": 1,
+        "price": 18000,
+        "stock": 30,
+        "discount": 10,
+        "image": "https://images.unsplash.com/photo-1555507032-abfa424c5b2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Croissant butter yang renyah dan lezat dengan lapisan-lapisan mentega yang sempurna"
+    },
+    {
+        "id": 3,
+        "name": "Donat Glaze",
+        "categoryId": 2,
+        "price": 12000,
+        "stock": 25,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Donat lembut dengan glaze manis yang sempurna"
+    },
+    {
+        "id": 4,
+        "name": "Brownies Coklat",
+        "categoryId": 2,
+        "price": 35000,
+        "stock": 20,
+        "discount": 15,
+        "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Brownies coklat yang lembut dan moist dengan coklat premium"
+    },
+    {
+        "id": 5,
+        "name": "French Baguette",
+        "categoryId": 1,
+        "price": 22000,
+        "stock": 15,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Baguette Perancis yang autentik dengan kulit renyah dan dalam lembut"
+    },
+    {
+        "id": 6,
+        "name": "Muffin Blueberry",
+        "categoryId": 2,
+        "price": 15000,
+        "stock": 35,
+        "discount": 5,
+        "image": "https://images.unsplash.com/photo-1567306226409-c386ed923f76?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Muffin blueberry lembut dengan blueberry segar"
+    },
+    {
+        "id": 7,
+        "name": "Pain Au Chocolat",
+        "categoryId": 3,
+        "price": 20000,
+        "stock": 18,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Pastry Perancis dengan filling coklat premium"
+    },
+    {
+        "id": 8,
+        "name": "Roti Sobek",
+        "categoryId": 1,
+        "price": 28000,
+        "stock": 22,
+        "discount": 10,
+        "image": "https://images.unsplash.com/photo-1598889814855-8d9559804f04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Roti sobek lembut dengan isian coklat dan keju"
+    },
+    {
+        "id": 9,
+        "name": "Eclair",
+        "categoryId": 3,
+        "price": 18000,
+        "stock": 12,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1561091966-9b5315a8c7c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Eclair klasik dengan krim vanilla dan glaze coklat"
+    },
+    {
+        "id": 10,
+        "name": "Roti Gandum",
+        "categoryId": 1,
+        "price": 30000,
+        "stock": 28,
+        "discount": 0,
+        "image": "https://images.unsplash.com/photo-1596797038534-2a9ed6c5e60f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        "description": "Roti gandum sehat dengan serat tinggi"
+    }
+]

@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "name": "Roti",
+        "description": "Berbagai macam roti segar yang dipanggang setiap hari dengan bahan-bahan pilihan"
+    },
+    {
+        "id": 2,
+        "name": "Kue",
+        "description": "Aneka kue manis dan lezat untuk menemani waktu santai Anda"
+    },
+    {
+        "id": 3,
+        "name": "Pastry",
+        "description": "Pastry premium dengan rasa internasional dan kualitas terbaik"
+    }
+]
