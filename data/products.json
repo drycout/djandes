@@ -1,15 +1,5 @@
 [
   {
-    "id": 2,
-    "name": "Croissant Butter",
-    "categoryId": 1,
-    "price": 18000,
-    "stock": 30,
-    "discount": 10,
-    "image": "https://images.unsplash.com/photo-1555507032-abfa424c5b2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-    "description": "Croissant butter yang renyah dan lezat dengan lapisan-lapisan mentega yang sempurna"
-  },
-  {
     "id": 3,
     "name": "Donat Glaze",
     "categoryId": 2,
