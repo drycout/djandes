@@ -1,15 +1,5 @@
 [
   {
-    "id": 3,
-    "name": "Donat Glaze",
-    "categoryId": 2,
-    "price": 12000,
-    "stock": 25,
-    "discount": 0,
-    "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-    "description": "Donat lembut dengan glaze manis yang sempurna"
-  },
-  {
     "id": 4,
     "name": "Brownies Coklat",
     "categoryId": 2,
