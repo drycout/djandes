@@ -19,7 +19,7 @@ class GitHubIntegration {
         }
         return {
             username: 'drycout',
-            repo: 'djandes',
+            repo: 'djandes-bakery',
             token: null
         };
     }
@@ -147,7 +147,7 @@ class GitHubIntegration {
                         stock: 25,
                         discount: 0,
                         image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                        description: "Donat dengan glaze manis"
+                        description: "Donat lembut dengan glaze manis"
                     },
                     {
                         id: 4,
@@ -523,5 +523,4 @@ class GitHubIntegration {
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = GitHubIntegration;
-
 }
