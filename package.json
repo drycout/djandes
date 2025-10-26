@@ -22,9 +22,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/drycout/djandes-site.git"
+    "url": "https://github.com/drycout/djandes.git"
   },
-  "homepage": "https://drycout.github.io/djandes-site/",
+  "homepage": "https://drycout.github.io/djandes/",
   "devDependencies": {
     "serve": "^14.2.1"
   },
@@ -36,4 +36,5 @@
     "last 2 versions",
     "not dead"
   ]
+
 }
