@@ -1,27 +1,17 @@
 [
-  {
-    "id": 1,
-    "name": "Roti",
-    "description": "Berbagai macam roti segar yang dipanggang setiap hari dengan bahan-bahan pilihan"
-  },
-  {
-    "id": 2,
-    "name": "Kue",
-    "description": "Aneka kue manis dan lezat untuk menemani waktu santai Anda"
-  },
-  {
-    "id": 3,
-    "name": "Pastry",
-    "description": "Pastry premium dengan rasa internasional dan kualitas terbaik"
-  },
-  {
-    "id": 1761521540655,
-    "name": "hantaran",
-    "description": "kue hantaran+ box"
-  },
-  {
-    "id": 1761521543439,
-    "name": "hantaran",
-    "description": "kue hantaran+ box"
-  }
+    {
+        "id": 1,
+        "name": "Roti",
+        "description": "Berbagai macam roti segar yang dipanggang setiap hari dengan bahan-bahan pilihan"
+    },
+    {
+        "id": 2,
+        "name": "Kue",
+        "description": "Aneka kue manis dan lezat untuk menemani waktu santai Anda"
+    },
+    {
+        "id": 3,
+        "name": "Pastry",
+        "description": "Pastry premium dengan rasa internasional dan kualitas terbaik"
+    }
 ]
