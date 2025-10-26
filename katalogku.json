@@ -1,0 +1,25 @@
+{
+  "products": [],
+  "settings": {
+    "mobileColumns": 2,
+    "desktopColumns": 5,
+    "productsPerPage": 20,
+    "maxImages": 6
+  },
+  "content": {
+    "shopName": "DJANDES",
+    "description": "Premium Cakes & Bakery for Your Special Moments",
+    "about": {
+      "welcome": "Welcome to DJANDES, where every cake tells a story",
+      "history": "Founded with passion for baking excellence",
+      "vision": "To be the most beloved bakery in town",
+      "mission": "Creating delicious memories one cake at a time"
+    },
+    "contact": {
+      "phone": "+1234567890",
+      "whatsapp": "+1234567890",
+      "email": "info@djandes.com",
+      "address": "123 Bakery Street, Sweet City, SC 12345"
+    }
+  }
+}
