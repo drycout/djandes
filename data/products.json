@@ -10,16 +10,6 @@
     "description": "Muffin blueberry lembut dengan blueberry segar"
   },
   {
-    "id": 7,
-    "name": "Pain Au Chocolat",
-    "categoryId": 3,
-    "price": 20000,
-    "stock": 18,
-    "discount": 0,
-    "image": "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-    "description": "Pastry Perancis dengan filling coklat premium"
-  },
-  {
     "id": 8,
     "name": "Roti Sobek",
     "categoryId": 1,
