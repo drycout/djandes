@@ -19,7 +19,7 @@ class GitHubIntegration {
         }
         return {
             username: 'drycout',
-            repo: 'djandes-site',
+            repo: 'djandes',
             token: null
         };
     }
@@ -523,4 +523,5 @@ class GitHubIntegration {
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = GitHubIntegration;
+
 }
